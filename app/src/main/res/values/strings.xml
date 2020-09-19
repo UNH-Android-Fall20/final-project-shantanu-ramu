@@ -10,4 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="price_baba" >Price Baba</string>
+    <string name="designed">Designed by Shantanu and Ramu</string>
 </resources>
