@@ -8,6 +8,28 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+
+
+<!--        <Button-->
+<!--            android:id="@+id/camera_capture_button"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="211dp"-->
+<!--            android:layout_marginBottom="50dp"-->
+<!--            android:elevation="2dp"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:text="Take Photo"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/fab"-->
+<!--            app:layout_constraintLeft_toLeftOf="@+id/fab"-->
+<!--            app:layout_constraintRight_toRightOf="@+id/fab" />-->
+    </androidx.camera.view.PreviewView>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
