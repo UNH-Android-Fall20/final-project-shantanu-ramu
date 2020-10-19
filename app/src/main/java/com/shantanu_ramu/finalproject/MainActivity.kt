@@ -173,6 +173,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Adding Barcode Scanning Functionality here
+
+
     private class LuminosityAnalyzer(private val listener: LumaListener) : ImageAnalysis.Analyzer {
 
         private fun ByteBuffer.toByteArray(): ByteArray {
