@@ -1,6 +1,9 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.shantanu_ramu.finalproject
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +25,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.barcode.*
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
@@ -29,6 +34,7 @@ import java.util.concurrent.Executors
 //import java.util.jar.Manifest
 
 typealias LumaListener = (luma: Double) -> Unit
+typealias BarcodeListner = (barluma: Double) -> Unit
 
 class MainActivity : AppCompatActivity() {
 
@@ -116,6 +122,14 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
 
+            val barAnalyzer = ImageAnalysis.Builder()
+                .build()
+                .also {
+                    it.setAnalyzer(cameraExecutor, BarImageAnalyzer { barluma ->
+                        Log.d(TAG, "Barcode Value: $barluma")
+                    })
+                }
+
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -125,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                    this, cameraSelector, preview, imageCapture, barAnalyzer)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -173,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //Adding Barcode Scanning Functionality here
+    //Added Luminosity and  Barcode Scanning Functionality here
 
 
     private class LuminosityAnalyzer(private val listener: LumaListener) : ImageAnalysis.Analyzer {
@@ -198,5 +212,44 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private class BarImageAnalyzer(private val listener1: BarcodeListner) : ImageAnalysis.Analyzer {
+
+        val options = BarcodeScannerOptions.Builder().build()
+
+
+        @SuppressLint("UnsafeExperimentalUsageError")
+
+        override fun analyze(imageProxy: ImageProxy) {
+//            var barluma : String? = null
+            val mediaImage = imageProxy.image
+            if (mediaImage != null) {
+                val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+                // Passed image to an ML Kit Vision API
+
+                val scanner = BarcodeScanning.getClient(options)
+                val result = scanner.process(image)
+                    .addOnSuccessListener { barcodes ->
+                        // Task completed successfully
+                        for (barcode in barcodes) {
+                            val rawValue = barcode.rawValue
+//                            barluma = barcode.rawValue
+                            Log.d(TAG, "passed with value: $rawValue")
+
+                        }
+
+                    }
+                    .addOnFailureListener {
+                        // Task failed with an exception
+                        Log.d(TAG, "failed") // for unit testing
+                    }
+                    .addOnSuccessListener {
+//                        Log.d(TAG, "Value is : $rawValue")
+                        imageProxy.close()
+//                        Log.d(TAG, "Success Listner") //for unit testing
+                    }
+            }
+//            listener1(123.0)
+        }
+    }
 
 }
