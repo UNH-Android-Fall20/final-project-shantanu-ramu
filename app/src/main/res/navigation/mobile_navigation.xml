@@ -9,6 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.shantanu_ramu.finalproject.ui.home.HomeFragment"
         android:label="@string/menu_home"
+        android:text="Welcome To Price Baba"
         tools:layout="@layout/fragment_home" />
 
     <fragment
