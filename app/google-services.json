@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "933273462724",
-    "firebase_url": "https://finalproject-16479.firebaseio.com",
-    "project_id": "finalproject-16479",
-    "storage_bucket": "finalproject-16479.appspot.com"
+    "project_number": "780881939834",
+    "firebase_url": "https://pricebaba-afcde.firebaseio.com",
+    "project_id": "pricebaba-afcde",
+    "storage_bucket": "pricebaba-afcde.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:933273462724:android:904e9a6fda6fee17f6a691",
+        "mobilesdk_app_id": "1:780881939834:android:7228d0d9775a2581ab9ac3",
         "android_client_info": {
           "package_name": "com.shantanu_ramu.finalproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "933273462724-jaecud295jihj2ac64lcj4auq3e9p1dl.apps.googleusercontent.com",
+          "client_id": "780881939834-j1t943bid26lsjj4jkupi7893ogdcnma.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAfyQdsko-ZvVvgBfkA9CZTG8FRpdxQteA"
+          "current_key": "AIzaSyCWdT2fQqAGM1qaKkO6RqrdVPJCwF55ZaY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "933273462724-jaecud295jihj2ac64lcj4auq3e9p1dl.apps.googleusercontent.com",
+              "client_id": "780881939834-j1t943bid26lsjj4jkupi7893ogdcnma.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
