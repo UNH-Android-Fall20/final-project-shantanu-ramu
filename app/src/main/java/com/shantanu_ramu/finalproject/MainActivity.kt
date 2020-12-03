@@ -1,7 +1,10 @@
 package com.shantanu_ramu.finalproject
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.Menu
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -23,6 +26,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        var sp : SharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE)
+
+        Toast.makeText(this, "Welcome "+sp.getString("userName","User"), Toast.LENGTH_LONG).show()
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
