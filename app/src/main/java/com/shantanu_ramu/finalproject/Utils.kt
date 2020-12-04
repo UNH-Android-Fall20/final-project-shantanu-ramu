@@ -44,6 +44,7 @@ object Utils {
         val result = res.get(key)
 //        val result = res.get(key.toInt())
         Log.d(TAG, "The price of given object is $result")
+
     }
 
     fun barValueComparision(key:String) {
