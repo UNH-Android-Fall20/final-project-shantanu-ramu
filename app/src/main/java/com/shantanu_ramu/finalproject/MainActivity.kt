@@ -2,11 +2,6 @@
 
 package com.shantanu_ramu.finalproject
 
-
-import android.content.ClipData
-import android.content.Intent
-import android.content.SharedPreferences
-
 //import com.google.firebase.firestore.FirebaseFirestore
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,16 +9,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,7 +20,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
-
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -41,10 +28,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-
-import com.google.android.material.snackbar.Snackbar
-
-
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -59,11 +42,9 @@ import java.util.concurrent.Executors
 typealias LumaListener = (luma: Double) -> Unit
 typealias BarcodeListner = (barluma: Double) -> Unit
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
 
 
     private var imageCapture: ImageCapture? = null
@@ -71,14 +52,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        var sp : SharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE)
-        Toast.makeText(this, "Welcome "+sp.getString("userName","User"), Toast.LENGTH_LONG).show()
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
 //        fab.setOnClickListener { view ->
@@ -86,13 +64,7 @@ class MainActivity : AppCompatActivity() {
 //                    .setAction("Action", null).show()
 //        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        //code to display user details nav bar header
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val headerView : View = navView.getHeaderView(0)
-        val navUsername : TextView = headerView.findViewById(R.id.navbarUsername)
-        val navUserEmail : TextView = headerView.findViewById(R.id.navbarEmail)
-        navUsername.text = sp.getString("userName","Android Studio")
-        navUserEmail.text = sp.getString("userEmail","android.studio@android.com")
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -103,15 +75,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        /*bLogout.setOnClickListener {
-            val editor = sp.edit()
-            editor.clear()
-            editor.commit()
-            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            finish()
-        }*/
-
 
 //        this.supportActionBar?.hide()
 //        this.supportActionBar?.displayOptions.
@@ -150,26 +113,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var sp : SharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE)
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                Toast.makeText(applicationContext, "Log Out Successful", Toast.LENGTH_LONG).show()
-                val editor = sp.edit()
-                editor.clear()
-                editor.commit()
-                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-}
-
-
 
     private fun takePhoto() {
         Utils.getFireData()
@@ -348,4 +291,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-

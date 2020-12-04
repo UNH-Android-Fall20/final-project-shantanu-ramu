@@ -14,12 +14,8 @@
         android:roundIcon="@mipmap/plogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".SignupActivity" /> <!-- <activity android:name=".MainActivity"></activity> -->
         <activity android:name=".Result"></activity>
         <!-- <activity android:name=".MainActivity"></activity> -->
-
         <activity
             android:name=".Splash"
             android:theme="@style/AppTheme.NoActionBar">
