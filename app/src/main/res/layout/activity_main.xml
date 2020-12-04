@@ -8,14 +8,45 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+
+
+<!--        <Button-->
+<!--            android:id="@+id/camera_capture_button"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="211dp"-->
+<!--            android:layout_marginBottom="50dp"-->
+<!--            android:elevation="2dp"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:text="Take Photo"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/fab"-->
+<!--            app:layout_constraintLeft_toLeftOf="@+id/fab"-->
+<!--            app:layout_constraintRight_toRightOf="@+id/fab" />-->
+    </androidx.camera.view.PreviewView>
+
+<!--    <FrameLayout-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="250dp"-->
+<!--        android:background="@drawable/qr_code_reader_square"/>-->
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:visibility="visible"
+        android:background="@android:color/transparent"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:itemTextColor="@color/white"
+        app:menu="@menu/activity_main_drawer"
+        tools:visibility="visible" />
 
     <include
         layout="@layout/app_bar_main"

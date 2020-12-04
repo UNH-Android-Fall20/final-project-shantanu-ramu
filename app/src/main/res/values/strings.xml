@@ -8,8 +8,10 @@
     <string name="action_settings">Log Out</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_gallery">Recent</string>
+    <string name="menu_slideshow">Settings</string>
+    <string name="manual_entry">Manual Entry</string>
+    <string name="the_prices">Prices For The Item Are:</string>
 
     <string name="price_baba">Price Baba</string>
     <string name="designed">Designed by Shantanu and Ramu</string>
