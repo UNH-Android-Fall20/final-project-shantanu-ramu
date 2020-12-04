@@ -2,9 +2,13 @@
 
 package com.shantanu_ramu.finalproject
 
+//import com.google.firebase.firestore.FirebaseFirestore
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -15,6 +19,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,7 +28,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-//import com.google.firebase.firestore.FirebaseFirestore
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -41,6 +45,7 @@ typealias BarcodeListner = (barluma: Double) -> Unit
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     private var imageCapture: ImageCapture? = null
 
@@ -71,6 +76,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+//        this.supportActionBar?.hide()
+//        this.supportActionBar?.displayOptions.
+        val actionBar = supportActionBar
+        actionBar!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -82,7 +92,10 @@ class MainActivity : AppCompatActivity() {
 
         // Set up the listener for take photo button
 //        camera_capture_button.setOnClickListener { takePhoto() }
-        fab.setOnClickListener { takePhoto() }
+        fab.setOnClickListener {
+            takePhoto()
+            startActivity(Intent(this, Result::class.java))
+        }
 
         outputDirectory = getOutputDirectory()
 
@@ -258,6 +271,8 @@ class MainActivity : AppCompatActivity() {
                             Utils.datahand(rawValue)
                             Utils.barValueComparision(rawValue.toString())
                             Log.d(TAG, "passed with value: $rawValue")
+//                            val intent = Intent(this, Result::class.java)
+//                            startActivity(intent)
                         }
 
                     }
