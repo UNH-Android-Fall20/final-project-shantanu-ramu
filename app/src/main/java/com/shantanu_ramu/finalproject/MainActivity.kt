@@ -2,11 +2,6 @@
 
 package com.shantanu_ramu.finalproject
 
-
-import android.content.ClipData
-import android.content.Intent
-import android.content.SharedPreferences
-
 //import com.google.firebase.firestore.FirebaseFirestore
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,16 +9,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,7 +20,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
-
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -41,10 +28,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-
-import com.google.android.material.snackbar.Snackbar
-
-
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -53,24 +36,28 @@ import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import android.content.ClipData
+import android.content.SharedPreferences
+
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 
 //import java.util.jar.Manifest
 
 typealias LumaListener = (luma: Double) -> Unit
 typealias BarcodeListner = (barluma: Double) -> Unit
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
 
 
     private var imageCapture: ImageCapture? = null
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,13 +73,14 @@ class MainActivity : AppCompatActivity() {
 //                    .setAction("Action", null).show()
 //        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        //code to display user details nav bar header
         val navView: NavigationView = findViewById(R.id.nav_view)
+
         val headerView : View = navView.getHeaderView(0)
         val navUsername : TextView = headerView.findViewById(R.id.navbarUsername)
         val navUserEmail : TextView = headerView.findViewById(R.id.navbarEmail)
         navUsername.text = sp.getString("userName","Android Studio")
         navUserEmail.text = sp.getString("userEmail","android.studio@android.com")
+
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -103,15 +91,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        /*bLogout.setOnClickListener {
-            val editor = sp.edit()
-            editor.clear()
-            editor.commit()
-            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            finish()
-        }*/
-
 
 //        this.supportActionBar?.hide()
 //        this.supportActionBar?.displayOptions.
@@ -140,18 +119,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var sp : SharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE)
         return when (item.itemId) {
@@ -167,9 +134,17 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-}
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
 
     private fun takePhoto() {
         Utils.getFireData()
@@ -348,4 +323,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-

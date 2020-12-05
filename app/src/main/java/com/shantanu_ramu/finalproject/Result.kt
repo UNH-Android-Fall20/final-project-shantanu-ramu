@@ -16,7 +16,7 @@ class Result : AppCompatActivity() {
         item_image.setImageResource(R.drawable.pricebaba_logo)
         item_website.setText("Amazon")
         item_price.setText("$"+"9")
-        item_price.setOnClickListener {
+        item_website.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse(web_url))
             startActivity(i)
         }
