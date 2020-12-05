@@ -6,58 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Result">
 
-    <ImageView
-        android:id="@+id/item_image"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="127dp"
-        android:layout_marginBottom="123dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintBottom_toTopOf="@+id/item_website"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <Button
-        android:id="@+id/item_website"
-        android:layout_width="245dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="123dp"
-        android:layout_weight="1"
-        android:text=""
-        app:layout_constraintEnd_toStartOf="@+id/item_price"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_image" />
-
-    <Button
-        android:id="@+id/item_price"
-        android:layout_width="136dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="123dp"
-        android:layout_marginEnd="12dp"
-        android:layout_weight="1"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/item_website"
-        app:layout_constraintTop_toBottomOf="@+id/item_image" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="198dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="186dp"
-        android:layout_marginBottom="28dp"
-        android:text="@string/the_prices"
-        app:layout_constraintBottom_toTopOf="@+id/item_website"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/res_products_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

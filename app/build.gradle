@@ -76,4 +76,8 @@ dependencies {
 // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha14"
 
+    // firebase UI
+    implementation 'com.firebaseui:firebase-ui-firestore:6.4.0'
+    implementation 'com.firebaseui:firebase-ui-storage:6.4.0'
+
 }
