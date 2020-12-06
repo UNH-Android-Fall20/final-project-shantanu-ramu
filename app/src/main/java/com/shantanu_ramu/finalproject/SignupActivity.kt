@@ -1,6 +1,8 @@
 package com.shantanu_ramu.finalproject
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -24,6 +26,9 @@ class SignupActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        val actionBar = supportActionBar
+        actionBar!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         signupBtn = findViewById(R.id.signUpsign)
         userName = findViewById(R.id.userName)

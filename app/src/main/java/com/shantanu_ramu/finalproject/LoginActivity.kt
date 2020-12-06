@@ -2,6 +2,8 @@ package com.shantanu_ramu.finalproject
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -22,6 +24,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val actionBar = supportActionBar
+        actionBar!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         val db = FirebaseFirestore.getInstance()
         var userFound = false
         var passCorrect = false

@@ -3,15 +3,21 @@
 package com.shantanu_ramu.finalproject
 
 //import com.google.firebase.firestore.FirebaseFirestore
+
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -36,23 +42,19 @@ import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import android.content.ClipData
-import android.content.SharedPreferences
-
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
 
 //import java.util.jar.Manifest
 
 typealias LumaListener = (luma: Double) -> Unit
 typealias BarcodeListner = (barluma: Double) -> Unit
+var start_res_activity : Boolean = false
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    var context : Context = this
 
     private var imageCapture: ImageCapture? = null
 
@@ -64,8 +66,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        var sp : SharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE)
-        Toast.makeText(this, "Welcome "+sp.getString("userName","User"), Toast.LENGTH_LONG).show()
+        val conte = getApplicationContext()
+        context = this
+        var sp : SharedPreferences = getSharedPreferences("login_details", MODE_PRIVATE)
+        Toast.makeText(this, "Welcome " + sp.getString("userName", "User"), Toast.LENGTH_LONG).show()
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
 //        fab.setOnClickListener { view ->
@@ -78,15 +82,15 @@ class MainActivity : AppCompatActivity() {
         val headerView : View = navView.getHeaderView(0)
         val navUsername : TextView = headerView.findViewById(R.id.navbarUsername)
         val navUserEmail : TextView = headerView.findViewById(R.id.navbarEmail)
-        navUsername.text = sp.getString("userName","Android Studio")
-        navUserEmail.text = sp.getString("userEmail","android.studio@android.com")
+        navUsername.text = sp.getString("userName", "Android Studio")
+        navUserEmail.text = sp.getString("userEmail", "android.studio@android.com")
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_recent, R.id.nav_manual_entry, R.id.nav_settings
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -120,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var sp : SharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE)
+        var sp : SharedPreferences = getSharedPreferences("login_details", MODE_PRIVATE)
         return when (item.itemId) {
             R.id.action_settings -> {
                 Toast.makeText(applicationContext, "Log Out Successful", Toast.LENGTH_LONG).show()
@@ -145,6 +149,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 
     private fun takePhoto() {
         Utils.getFireData()
@@ -225,6 +230,7 @@ class MainActivity : AppCompatActivity() {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+//        var context : Context = this
     }
 
     override fun onRequestPermissionsResult(
@@ -250,6 +256,17 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, rawValue, Toast.LENGTH_LONG).show()
     }
 
+     public fun itemNotPresentFirestore(msg: String) {
+        Toast.makeText(this, " $msg", Toast.LENGTH_LONG).show()
+    }
+
+
+    public fun intentToResult() {
+        val intent = Intent(this, Result::class.java)
+//        val intent = Intent(getActivity(), Result.class)
+        startActivity(intent)
+    }
+
     private class LuminosityAnalyzer(private val listener: LumaListener) : ImageAnalysis.Analyzer {
 
         private fun ByteBuffer.toByteArray(): ByteArray {
@@ -272,10 +289,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private class BarImageAnalyzer(private val listener1: BarcodeListner) : ImageAnalysis.Analyzer {
+    private inner class BarImageAnalyzer(private val listener1: BarcodeListner) : ImageAnalysis.Analyzer {
 
         val options = BarcodeScannerOptions.Builder().build()
-
+        val ma = MainActivity()
+        val resultActivity = Result()
 
         @SuppressLint("UnsafeExperimentalUsageError")
 
@@ -300,11 +318,34 @@ class MainActivity : AppCompatActivity() {
 //                            Log.d(TAG, "passed with value: $rawValue")
 
 //                            rawValue?.let { ac.toastFun(it) }
-                            Utils.datahand(rawValue)
-                            Utils.barValueComparision(rawValue.toString())
-                            Log.d(TAG, "passed with value: $rawValue")
-//                            val intent = Intent(this, Result::class.java)
-//                            startActivity(intent)
+/*                            Utils.datahand(rawValue)
+                            Utils.barValueComparision(rawValue.toString())*/
+//                            val resultActivity = Result()
+                            resultActivity.append_res_value(rawValue.toString())
+                            Log.d(TAG, "Passed with Value: $rawValue")
+
+//                            val context: Context = ma.context
+//                            ma.intentToResult()
+//                            ma.fab.performClick()
+//                            ma.fab.callOnClick()
+/*                            if (rawValue != null){
+                                start_res_activity = true
+                            }*/
+//                            var context = R.layout.activity_result
+
+/*                            if (rawValue != null) {
+                                val intent = Intent(this@MainActivity, Result::class.java)
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(this@MainActivity, "Given Item is not Present in Our Databse", Toast.LENGTH_SHORT).show()
+                            }*/
+
+                            val intent = Intent(this@MainActivity, Result::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                            startActivity(intent)
+//                            toastFun(raw)
+
+
                         }
 
                     }
