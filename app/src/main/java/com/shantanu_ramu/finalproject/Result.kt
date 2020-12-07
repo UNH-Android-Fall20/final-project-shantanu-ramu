@@ -2,11 +2,15 @@ package com.shantanu_ramu.finalproject
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.Source
@@ -14,7 +18,16 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_result.*
 
+
 private const val TAG = "Result"
+var price = ""
+var image_url = ""
+var name = ""
+var website = ""
+var website_name = ""
+var web_url = ""
+var item_website_id: Button? = null
+var item_price_id: Button? = null
 
 class Result : AppCompatActivity() {
 
@@ -47,14 +60,30 @@ class Result : AppCompatActivity() {
 
         context = this
 
-        var web_url = "https://www.walmart.com/ip/Apple-AirPods-with-Charging-Case-Latest-Model/604342441"
+
+/*        var img1 = "https://i5.walmartimages.com/asr/5b7b8108-6b52-49d4-a521-88b2a49df6b2_1.eb84a7184763e078f3f4c0bdc1288e7a.jpeg"
+        var image1: Bitmap? = null
+        val `in` = java.net.URL(img1).openStream()
+        image1 = BitmapFactory.decodeStream(`in`)*/
+
+
+
+//        var web_url = "https://www.walmart.com/ip/Apple-AirPods-with-Charging-Case-Latest-Model/604342441"
+//        var web_url = website
         item_image.setImageResource(R.drawable.pricebaba_logo)
-        item_website.setText("Amazon")
+//        item_image.setImageBitmap(image1)
+//        item_website.setText("Amazon")
+        item_website.setText(name)
 //        item_price.setText("$" + "9")
+        item_price.setText(price)
         item_website.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse(web_url))
             startActivity(i)
         }
+        item_price_id = findViewById(R.id.item_price)
+        item_website_id = findViewById(R.id.item_website)
+//        web_url = findViewById(R.id.)
+
         //context = (R.id.
 
 
@@ -72,6 +101,9 @@ class Result : AppCompatActivity() {
 
     }
 
+    fun addText(price: String?, image_url: String?, name: String?, website: String?) {
+        item_price.setText(price)
+    }
 
     public fun append_res_value(key: String) {
 //        val docRef = Utils.barValueComparision(key)
@@ -89,15 +121,30 @@ class Result : AppCompatActivity() {
                 val document = task.result
                 if (document != null) {
                     Log.d(TAG, "Cached document data: ${document.data}")
-                    var price = document.data?.get("price")
-                    var image_url = document.data?.get("image_url")
-                    var name = document.data?.get("name")
-                    var website = document.data?.get("source_url")
+                    price = document.data?.get("price").toString()
+                    image_url = document.data?.get("image_url").toString()
+                    name = document.data?.get("name").toString()
+                    website = document.data?.get("source_url").toString()
+                    website_name = document.data?.get("source").toString()
+
 
                     Log.d(TAG, "Price is $price")
-//                    item_price.setText(price.toString())
+/*                    addText(
+                        price, image_url as String?, name as String?,
+                        website as String?
+                    )*/
+
+
+
+                    item_price_id?.setText("$" + price.toString())
+                    web_url = website
+                    item_website_id?.setText(website_name.toString())
+
+
+
+
 /*                    item_image.setImageURI(image_url as Uri?)
-//                    item_website.setText(website.toString())
+                    item_website_id.setText(website.toString())
                     item_website.setOnClickListener {
                         val i = Intent(Intent.ACTION_VIEW, Uri.parse(website as String?))
                         startActivity(i)
@@ -114,7 +161,9 @@ class Result : AppCompatActivity() {
 //                Toast.makeText(MainActivity@this, "Item Not Present in Database", Toast.LENGTH_LONG).show()
                 Log.d(TAG, "Cached get failed: ", task.exception)
             }
+
         }
+
 
 /*        val data = docRef
             .get()
