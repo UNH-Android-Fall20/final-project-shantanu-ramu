@@ -14,7 +14,7 @@
             android:title="@string/menu_recent" />
 
         <item
-            android:id="@+id/manual_entry"
+            android:id="@+id/manual_entry1"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/manual_entry" />
         <item

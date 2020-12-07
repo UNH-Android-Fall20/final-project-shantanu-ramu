@@ -114,8 +114,10 @@ class MainActivity : AppCompatActivity() {
 //        camera_capture_button.setOnClickListener { takePhoto() }
         fab.setOnClickListener {
             takePhoto()
-            startActivity(Intent(this, Result::class.java))
+//            startActivity(Intent(this, Result::class.java))
+            startActivity(Intent(this, ManualEntry::class.java))
         }
+
 
         outputDirectory = getOutputDirectory()
 
