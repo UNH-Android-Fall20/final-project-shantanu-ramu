@@ -428,7 +428,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 /*                            Utils.datahand(rawValue)
                             Utils.barValueComparision(rawValue.toString())*/
 //                            val resultActivity = Result()
-                            resultActivity.append_res_value(rawValue.toString())
+//                            resultActivity.append_res_value(rawValue.toString())
                             Log.d(TAG, "Passed with Value: $rawValue")
 
 //                            val context: Context = ma.context
@@ -449,6 +449,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                             val intent = Intent(this@MainActivity, Result::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                            intent.putExtra("key", rawValue.toString())
                             startActivity(intent)
 //                            toastFun(raw)
 
