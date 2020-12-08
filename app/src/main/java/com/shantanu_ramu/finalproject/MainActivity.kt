@@ -141,8 +141,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        camera_capture_button.setOnClickListener { takePhoto() }
         fab.setOnClickListener {
             takePhoto()
-//            startActivity(Intent(this, Result::class.java))
-            startActivity(Intent(this, ManualEntry::class.java))
+           startActivity(Intent(this, Result::class.java))
+//            startActivity(Intent(this, ManualEntry::class.java))
         }
 
 
@@ -235,7 +235,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 exitProcess(0)
             }
 
-            R.id.manual_entry_button -> {
+            R.id.manual_entry1 -> {
 //                navController.navigate(R.id.)
                 Toast.makeText(applicationContext, "Manual Entry", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, ManualEntry::class.java))
@@ -248,8 +248,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_recent -> {
-                Toast.makeText(applicationContext, "Recent", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, Result::class.java))
+                Toast.makeText(applicationContext, "Top Search", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, RecyclerViewActivity::class.java))
                 Log.d(TAG, "Exiting The App")
             }
         }
@@ -363,7 +363,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Toast.makeText(this, rawValue, Toast.LENGTH_LONG).show()
     }
 
-     public fun itemNotPresentFirestore(msg: String) {
+    public fun itemNotPresentFirestore(msg: String) {
         Toast.makeText(this, " $msg", Toast.LENGTH_LONG).show()
     }
 
