@@ -3,6 +3,7 @@ package com.shantanu_ramu.finalproject
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -44,10 +45,12 @@ object Utils {
         val result = res.get(key)
 //        val result = res.get(key.toInt())
         Log.d(TAG, "The price of given object is $result")
+/*        val Result = Result()
+        Result.append_res_value(result.toString())*/
 
     }
 
-    fun barValueComparision(key:String) {
+    fun barValueComparision(key:String): DocumentReference {
         val db = Firebase.firestore
         val docRef = db.collection("products").document("barcode")
         val data = docRef
@@ -56,5 +59,6 @@ object Utils {
                 processBar(res, key)
             }
 
+    return docRef
     }
 }
