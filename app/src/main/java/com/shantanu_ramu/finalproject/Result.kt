@@ -23,6 +23,7 @@ private const val TAG = "Result"
 var price = ""
 var image_url = ""
 var name = ""
+var productName: TextView? = null
 var website = ""
 var website_name = ""
 var web_url = ""
@@ -82,6 +83,7 @@ class Result : AppCompatActivity() {
         }
         item_price_id = findViewById(R.id.item_price)
         item_website_id = findViewById(R.id.item_website)
+        productName = findViewById(R.id.item_name)
 //        web_url = findViewById(R.id.)
 
         //context = (R.id.
@@ -122,9 +124,9 @@ class Result : AppCompatActivity() {
                 if (document != null) {
                     Log.d(TAG, "Cached document data: ${document.data}")
                     price = document.data?.get("price").toString()
-                    image_url = document.data?.get("image_url").toString()
-                    name = document.data?.get("name").toString()
-                    website = document.data?.get("source_url").toString()
+                    image_url = document.data?.get("imageUrl").toString()
+                    name = document.data?.get("productName").toString()
+                    website = document.data?.get("url").toString()
                     website_name = document.data?.get("source").toString()
 
 
@@ -139,6 +141,7 @@ class Result : AppCompatActivity() {
                     item_price_id?.setText("$" + price.toString())
                     web_url = website
                     item_website_id?.setText(website_name.toString())
+                    productName?.setText(name.toString())
 
 
 
