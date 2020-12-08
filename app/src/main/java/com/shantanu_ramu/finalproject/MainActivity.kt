@@ -3,23 +3,30 @@
 package com.shantanu_ramu.finalproject
 
 //import com.google.firebase.firestore.FirebaseFirestore
+
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -36,45 +43,85 @@ import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.system.exitProcess
 
 //import java.util.jar.Manifest
 
 typealias LumaListener = (luma: Double) -> Unit
 typealias BarcodeListner = (barluma: Double) -> Unit
+var start_res_activity : Boolean = false
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    var context : Context = this
 
     private var imageCapture: ImageCapture? = null
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
 
+    lateinit var toolbar: Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+//        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar= findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        val conte = getApplicationContext()
+        context = this
+        var sp : SharedPreferences = getSharedPreferences("login_details", MODE_PRIVATE)
+        Toast.makeText(this, "Welcome " + sp.getString("userName", "User"), Toast.LENGTH_LONG).show()
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
 //        fab.setOnClickListener { view ->
 //            Snackbar.make(view, "New Actions Coming Soon", Snackbar.LENGTH_LONG)
 //                    .setAction("Action", null).show()
 //        }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+//        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+//        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView= findViewById(R.id.nav_view)
+
+        val headerView : View = navView.getHeaderView(0)
+        val navUsername : TextView = headerView.findViewById(R.id.navbarUsername)
+        val navUserEmail : TextView = headerView.findViewById(R.id.navbarEmail)
+        navUsername.text = sp.getString("userName", "Android Studio")
+        navUserEmail.text = sp.getString("userEmail", "android.studio@android.com")
+
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_recent, R.id.manual_entry_button, R.id.nav_exit
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+        navView.setNavigationItemSelectedListener(this)
+
+
+/*        navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_exit -> {
+                    Toast.makeText(applicationContext, "Exit", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Exit Button Clicked")
+                    true
+                }
+                else -> false
+            }
+        }*/
 
 //        this.supportActionBar?.hide()
 //        this.supportActionBar?.displayOptions.
@@ -94,14 +141,77 @@ class MainActivity : AppCompatActivity() {
 //        camera_capture_button.setOnClickListener { takePhoto() }
         fab.setOnClickListener {
             takePhoto()
-            startActivity(Intent(this, Result::class.java))
+//            startActivity(Intent(this, Result::class.java))
+            startActivity(Intent(this, ManualEntry::class.java))
         }
+
 
         outputDirectory = getOutputDirectory()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var sp : SharedPreferences = getSharedPreferences("login_details", MODE_PRIVATE)
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                Toast.makeText(applicationContext, "Log Out Successful", Toast.LENGTH_LONG).show()
+                val editor = sp.edit()
+                editor.clear()
+                editor.commit()
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                finish()
+                true
+            }
+/*            R.id.nav_exit -> {
+                Toast.makeText(applicationContext, "Exiting", Toast.LENGTH_SHORT).show()
+//                finishAffinity()
+                true
+            }*/
+            else -> super.onOptionsItemSelected(item)
+        }
+/*        val id = item.itemId
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true
+        }*/
+    }
+/*
+    val nav_view = R.id.nav_view
+    nav_view.set*/
+
+/*    fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_home -> {
+                // Handle the camera action
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_recent -> {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+
+            }
+            R.id.manual_entry1 -> {
+                val intent = Intent(this, ManualEntry::class.java)
+                startActivity(intent)
+
+            }
+            R.id.nav_settings -> {
+*//*                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)*//*
+                val actionSettings = findViewById<View>(R.id.action_settings) as MenuItem
+                onOptionsItemSelected(actionSettings);
+
+            }
+
+        }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -113,6 +223,40 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        Log.d(TAG, "Item is : ${p0.itemId}")
+        when (p0.itemId) {
+            R.id.nav_exit -> {
+
+                Toast.makeText(applicationContext, "Exiting", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Exiting The App")
+                exitProcess(0)
+            }
+
+            R.id.manual_entry_button -> {
+//                navController.navigate(R.id.)
+                Toast.makeText(applicationContext, "Manual Entry", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, ManualEntry::class.java))
+                Log.d(TAG, "Recent Activity")
+            }
+
+            R.id.nav_home -> {
+//                Toast.makeText(applicationContext, "Exiting", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Home")
+            }
+
+            R.id.nav_recent -> {
+                Toast.makeText(applicationContext, "Recent", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, Result::class.java))
+                Log.d(TAG, "Exiting The App")
+            }
+        }
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
 
     private fun takePhoto() {
         Utils.getFireData()
@@ -193,6 +337,7 @@ class MainActivity : AppCompatActivity() {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+//        var context : Context = this
     }
 
     override fun onRequestPermissionsResult(
@@ -218,6 +363,17 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, rawValue, Toast.LENGTH_LONG).show()
     }
 
+     public fun itemNotPresentFirestore(msg: String) {
+        Toast.makeText(this, " $msg", Toast.LENGTH_LONG).show()
+    }
+
+
+    public fun intentToResult() {
+        val intent = Intent(this, Result::class.java)
+//        val intent = Intent(getActivity(), Result.class)
+        startActivity(intent)
+    }
+
     private class LuminosityAnalyzer(private val listener: LumaListener) : ImageAnalysis.Analyzer {
 
         private fun ByteBuffer.toByteArray(): ByteArray {
@@ -240,10 +396,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private class BarImageAnalyzer(private val listener1: BarcodeListner) : ImageAnalysis.Analyzer {
+    private inner class BarImageAnalyzer(private val listener1: BarcodeListner) : ImageAnalysis.Analyzer {
 
         val options = BarcodeScannerOptions.Builder().build()
-
+        val ma = MainActivity()
+        val resultActivity = Result()
 
         @SuppressLint("UnsafeExperimentalUsageError")
 
@@ -268,11 +425,34 @@ class MainActivity : AppCompatActivity() {
 //                            Log.d(TAG, "passed with value: $rawValue")
 
 //                            rawValue?.let { ac.toastFun(it) }
-                            Utils.datahand(rawValue)
-                            Utils.barValueComparision(rawValue.toString())
-                            Log.d(TAG, "passed with value: $rawValue")
-//                            val intent = Intent(this, Result::class.java)
-//                            startActivity(intent)
+/*                            Utils.datahand(rawValue)
+                            Utils.barValueComparision(rawValue.toString())*/
+//                            val resultActivity = Result()
+                            resultActivity.append_res_value(rawValue.toString())
+                            Log.d(TAG, "Passed with Value: $rawValue")
+
+//                            val context: Context = ma.context
+//                            ma.intentToResult()
+//                            ma.fab.performClick()
+//                            ma.fab.callOnClick()
+/*                            if (rawValue != null){
+                                start_res_activity = true
+                            }*/
+//                            var context = R.layout.activity_result
+
+/*                            if (rawValue != null) {
+                                val intent = Intent(this@MainActivity, Result::class.java)
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(this@MainActivity, "Given Item is not Present in Our Databse", Toast.LENGTH_SHORT).show()
+                            }*/
+
+                            val intent = Intent(this@MainActivity, Result::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                            startActivity(intent)
+//                            toastFun(raw)
+
+
                         }
 
                     }
@@ -289,5 +469,9 @@ class MainActivity : AppCompatActivity() {
 //            listener1(123.0)
         }
     }
+
+
+
+
 
 }
