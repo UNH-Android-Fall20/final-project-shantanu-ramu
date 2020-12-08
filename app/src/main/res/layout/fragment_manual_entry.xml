@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/manual_text1">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/manual_entry1"
+            android:id="@+id/manual_entry_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="hint" />

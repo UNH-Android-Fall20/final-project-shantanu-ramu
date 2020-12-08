@@ -14,7 +14,7 @@ class ManualEntry : AppCompatActivity() {
         setContentView(R.layout.activity_manual_entry)
 
         manual_scan = findViewById(R.id.manual_scan1)
-        manual_entry = findViewById(R.id.manual_entry1)
+        manual_entry = findViewById(R.id.manual_entry_button)
 
         val res = Result()
 

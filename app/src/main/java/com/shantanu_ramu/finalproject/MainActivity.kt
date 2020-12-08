@@ -19,13 +19,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -42,6 +43,7 @@ import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.system.exitProcess
 
 //import java.util.jar.Manifest
 
@@ -50,7 +52,7 @@ typealias BarcodeListner = (barluma: Double) -> Unit
 var start_res_activity : Boolean = false
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -61,10 +63,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
 
+    lateinit var toolbar: Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+//        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar= findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         val conte = getApplicationContext()
         context = this
@@ -76,8 +83,13 @@ class MainActivity : AppCompatActivity() {
 //            Snackbar.make(view, "New Actions Coming Soon", Snackbar.LENGTH_LONG)
 //                    .setAction("Action", null).show()
 //        }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+//        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+//        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView= findViewById(R.id.nav_view)
 
         val headerView : View = navView.getHeaderView(0)
         val navUsername : TextView = headerView.findViewById(R.id.navbarUsername)
@@ -90,11 +102,26 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_recent, R.id.nav_manual_entry, R.id.nav_settings
+                R.id.nav_home, R.id.nav_recent, R.id.manual_entry_button, R.id.nav_exit
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+        navView.setNavigationItemSelectedListener(this)
+
+
+/*        navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_exit -> {
+                    Toast.makeText(applicationContext, "Exit", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Exit Button Clicked")
+                    true
+                }
+                else -> false
+            }
+        }*/
 
 //        this.supportActionBar?.hide()
 //        this.supportActionBar?.displayOptions.
@@ -137,9 +164,54 @@ class MainActivity : AppCompatActivity() {
                 finish()
                 true
             }
+/*            R.id.nav_exit -> {
+                Toast.makeText(applicationContext, "Exiting", Toast.LENGTH_SHORT).show()
+//                finishAffinity()
+                true
+            }*/
             else -> super.onOptionsItemSelected(item)
         }
+/*        val id = item.itemId
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true
+        }*/
     }
+/*
+    val nav_view = R.id.nav_view
+    nav_view.set*/
+
+/*    fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_home -> {
+                // Handle the camera action
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_recent -> {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+
+            }
+            R.id.manual_entry1 -> {
+                val intent = Intent(this, ManualEntry::class.java)
+                startActivity(intent)
+
+            }
+            R.id.nav_settings -> {
+*//*                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)*//*
+                val actionSettings = findViewById<View>(R.id.action_settings) as MenuItem
+                onOptionsItemSelected(actionSettings);
+
+            }
+
+        }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -150,6 +222,39 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        Log.d(TAG, "Item is : ${p0.itemId}")
+        when (p0.itemId) {
+            R.id.nav_exit -> {
+
+                Toast.makeText(applicationContext, "Exiting", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Exiting The App")
+                exitProcess(0)
+            }
+
+            R.id.manual_entry_button -> {
+//                navController.navigate(R.id.)
+                Toast.makeText(applicationContext, "Manual Entry", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, ManualEntry::class.java))
+                Log.d(TAG, "Recent Activity")
+            }
+
+            R.id.nav_home -> {
+//                Toast.makeText(applicationContext, "Exiting", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Home")
+            }
+
+            R.id.nav_recent -> {
+                Toast.makeText(applicationContext, "Recent", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, Result::class.java))
+                Log.d(TAG, "Exiting The App")
+            }
+        }
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
     }
 
 
@@ -364,5 +469,9 @@ class MainActivity : AppCompatActivity() {
 //            listener1(123.0)
         }
     }
+
+
+
+
 
 }

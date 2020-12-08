@@ -14,12 +14,12 @@
             android:title="@string/menu_recent" />
 
         <item
-            android:id="@+id/manual_entry1"
+            android:id="@+id/manual_entry_button"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/manual_entry" />
         <item
-            android:id="@+id/nav_settings"
+            android:id="@+id/nav_exit"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_settings" />
+            android:title="@string/menu_exit" />
     </group>
 </menu>
