@@ -26,7 +26,19 @@ import java.net.URL
 
 
 private const val TAG = "Result"
+
 var product : Product = Product()
+
+
+var price = ""
+var image_url = ""
+var name = ""
+var productName: TextView? = null
+var website = ""
+var website_name = ""
+var web_url = ""
+var item_website_id: Button? = null
+var item_price_id: Button? = null
 
 
 class Result : AppCompatActivity() {
@@ -50,6 +62,28 @@ class Result : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+
+
+
+
+//        var web_url = "https://www.walmart.com/ip/Apple-AirPods-with-Charging-Case-Latest-Model/604342441"
+//        var web_url = website
+        item_image.setImageResource(R.drawable.pricebaba_logo)
+//        item_image.setImageBitmap(image1)
+//        item_website.setText("Amazon")
+        item_website.setText(name)
+//        item_price.setText("$" + "9")
+        item_price.setText(price)
+        item_website.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(web_url))
+            startActivity(i)
+        }
+        item_price_id = findViewById(R.id.item_price)
+        item_website_id = findViewById(R.id.item_website)
+        productName = findViewById(R.id.item_name)
+//        web_url = findViewById(R.id.)
+
+        //context = (R.id.
 
 
 
@@ -77,6 +111,7 @@ class Result : AppCompatActivity() {
                 // Document found in the offline cache
                 val document = task.result
                 if (document != null) {
+
                     if (document.data != null) {
                         Log.d(TAG, "Cached document data: ${document.data}")
 
@@ -109,6 +144,14 @@ class Result : AppCompatActivity() {
 //                Toast.makeText(MainActivity@this, "Item Not Present in Database", Toast.LENGTH_LONG).show()
                 Log.d(TAG, "Cached get failed: ", task.exception)
             }
+//                  need to comment it
+                    Log.d(TAG, "Cached document data: ${document.data}")
+                    price = document.data?.get("price").toString()
+                    image_url = document.data?.get("imageUrl").toString()
+                    name = document.data?.get("productName").toString()
+                    website = document.data?.get("url").toString()
+                    website_name = document.data?.get("source").toString()
+
 
         }.addOnFailureListener {
             productNotFound()
@@ -125,6 +168,7 @@ class Result : AppCompatActivity() {
         val itemPrice : TextView = findViewById(R.id.item_price)
         val itemWebsite : TextView = findViewById(R.id.item_website)
 
+
         Glide.with(prodImage.context).load(product.imageUrl).into(prodImage)
         item_website.text = product.source
         item_price.text = product.price
@@ -136,6 +180,12 @@ class Result : AppCompatActivity() {
         itemPrice?.text = "$" + product.price.toString()
         itemWebsite?.text = "Available in "+product.source.toString()
     }
+
+                    item_price_id?.setText("$" + price.toString())
+                    web_url = website
+                    item_website_id?.setText(website_name.toString())
+                    productName?.setText(name.toString())
+
 
     private fun productNotFound(){
         val prodImage : ImageView = findViewById(R.id.item_image)
