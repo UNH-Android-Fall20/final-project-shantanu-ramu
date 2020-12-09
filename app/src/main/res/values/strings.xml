@@ -8,9 +8,9 @@
     <string name="action_settings">Log Out</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_recent">Recent</string>
+    <string name="menu_recent">Top Search</string>
     <string name="manual_entry">Manual Entry</string>
-    <string name="menu_exit">Exit</string>
+    <string name="menu_settings">Exit</string>
     <string name="the_prices">Prices For The Item Are:</string>
 
     <string name="price_baba">Price Baba</string>
