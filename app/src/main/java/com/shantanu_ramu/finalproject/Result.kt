@@ -1,8 +1,8 @@
 package com.shantanu_ramu.finalproject
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,16 +10,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.shantanu_ramu.finalproject.ui.pojo.Product
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_result.*
+import java.net.URL
 
 
 private const val TAG = "Result"
+
+var product : Product = Product()
+
+
 var price = ""
 var image_url = ""
 var name = ""
@@ -30,24 +40,17 @@ var web_url = ""
 var item_website_id: Button? = null
 var item_price_id: Button? = null
 
+
 class Result : AppCompatActivity() {
 
-/*    fun itemNotPresentFirestore() {
-        Toast.makeText(this, "The Give Item is not Present in Our Database", Toast.LENGTH_LONG).show()
-    }*/
     var context : Context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
+        val key : String = intent.extras?.getString("key","") ?: "718103230759"
+        append_res_value(key)
 
-/*            onBackPressedDispatcher.onBackPressed()
-        fun onBackPressed() {
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-
-        }*/
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(this@Result, MainActivity::class.java)
@@ -59,13 +62,7 @@ class Result : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        context = this
 
-
-/*        var img1 = "https://i5.walmartimages.com/asr/5b7b8108-6b52-49d4-a521-88b2a49df6b2_1.eb84a7184763e078f3f4c0bdc1288e7a.jpeg"
-        var image1: Bitmap? = null
-        val `in` = java.net.URL(img1).openStream()
-        image1 = BitmapFactory.decodeStream(`in`)*/
 
 
 
@@ -81,104 +78,166 @@ class Result : AppCompatActivity() {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse(web_url))
             startActivity(i)
         }
-        item_price_id = findViewById(R.id.item_price)
+/*        item_price_id = findViewById(R.id.item_price)
         item_website_id = findViewById(R.id.item_website)
-        productName = findViewById(R.id.item_name)
+        productName = findViewById(R.id.item_name)*/
 //        web_url = findViewById(R.id.)
 
         //context = (R.id.
 
 
-    }
-
-    fun assignValues() {
-/*        val ma = MainActivity()
-        ma.intentToResult()*/
-/*        val i = Intent(this, Result::class.java)
-        startActivity(i)*/
-
-/*        val intent = intent
-        finish()
-        startActivity(intent)*/
 
     }
 
-    fun addText(price: String?, image_url: String?, name: String?, website: String?) {
-        item_price.setText(price)
-    }
+
 
     public fun append_res_value(key: String) {
+
+
 //        val docRef = Utils.barValueComparision(key)
         val db = Firebase.firestore
         val docRef = db.collection("products").document(key)
-        // Source can be CACHE, SERVER, or DEFAULT.
-        val source = Source.CACHE
-
         val ma = MainActivity()
+        var secondSource : Boolean = false
+        val source2 : TextView = findViewById(R.id.secondSource)
+        val avilable : TextView = findViewById(R.id.avilable)
 
         // Get the document, forcing the SDK to use the offline cache
         docRef.get().addOnCompleteListener { task ->
+//            val userInfo = task.toObject(Product::class.java)
             if (task.isSuccessful) {
+
+
                 // Document found in the offline cache
                 val document = task.result
                 if (document != null) {
-                    Log.d(TAG, "Cached document data: ${document.data}")
+
+                    if (document.data != null) {
+                        Log.d(TAG, "Cached document data: ${document.data}")
+
+                        /*product = document.toObject(Product::class.java)!!*/
+                        product.price = document.data?.get("price").toString()
+                        product.imageUrl = document.data?.get("imageUrl").toString()
+                        product.productName = document.data?.get("productName").toString()
+                        product.url = document.data?.get("url").toString()
+                        product.source = document.data?.get("source").toString()
+                        secondSource = document.data?.get("secondSource") as Boolean
+                        if(secondSource){
+                            callForSecondSource(key)
+                        }else{
+                            source2.text = " "
+                            avilable.text = " "
+                        }
+
+                        productFound()
+
+
+                    } else {
+                        productNotFound()
+            //                    ma.itemNotPresentFirestore("Item Not Present in Database")
+            //                    Toast.makeText(MainActivity@this, "Item Not Present in Database", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } else {
+                productNotFound()
+//                ma.itemNotPresentFirestore("Item Not Present in Database")
+//                Toast.makeText(MainActivity@this, "Item Not Present in Database", Toast.LENGTH_LONG).show()
+                Log.d(TAG, "Cached get failed: ", task.exception)
+            }
+//                  need to comment it
+/*                    Log.d(TAG, "Cached document data: ${document.data}")
                     price = document.data?.get("price").toString()
                     image_url = document.data?.get("imageUrl").toString()
                     name = document.data?.get("productName").toString()
                     website = document.data?.get("url").toString()
-                    website_name = document.data?.get("source").toString()
+                    website_name = document.data?.get("source").toString()*/
 
 
-                    Log.d(TAG, "Price is $price")
-/*                    addText(
-                        price, image_url as String?, name as String?,
-                        website as String?
-                    )*/
-
-
-
-                    item_price_id?.setText("$" + price.toString())
-                    web_url = website
-                    item_website_id?.setText(website_name.toString())
-                    productName?.setText(name.toString())
-
-
-
-
-/*                    item_image.setImageURI(image_url as Uri?)
-                    item_website_id.setText(website.toString())
-                    item_website.setOnClickListener {
-                        val i = Intent(Intent.ACTION_VIEW, Uri.parse(website as String?))
-                        startActivity(i)
-                        Log.d(TAG, "Price is $price")
-                    }*/
-//                    ma.intentToResult()
-//                    assignValues()
-
-                } else {
-                    ma.itemNotPresentFirestore("Item Not Present in Database")
-                }
-            } else {
-                ma.itemNotPresentFirestore("Item Not Present in Database")
-//                Toast.makeText(MainActivity@this, "Item Not Present in Database", Toast.LENGTH_LONG).show()
-                Log.d(TAG, "Cached get failed: ", task.exception)
-            }
-
+        }.addOnFailureListener {
+            productNotFound()
+//            Toast.makeText(this, "Item Not Present in Database", Toast.LENGTH_LONG).show()
         }
 
-
-/*        val data = docRef
-            .get()
-            .addOnSuccessListener { res ->
-//                val result = res.get(key)
-
-                Log.d(TAG, "The price of given object $key is $res")*/
     }
 
-/*        val data_res = data.getResult()
-        if (data_res != null) {
-            Log.d(TAG, "The value of data is ${data_res.getString("price")}")
-        }*/
+    private fun productFound(){
+        context = this
+
+        val prodImage : ImageView = findViewById(R.id.item_image)
+        val itemName : TextView = findViewById(R.id.item_name)
+        val itemPrice : TextView = findViewById(R.id.item_price)
+        val itemWebsite : TextView = findViewById(R.id.item_website)
+
+
+        Glide.with(prodImage.context).load(product.imageUrl).into(prodImage)
+        item_website.text = product.source
+        item_price.text = product.price
+        prodImage.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
+            startActivity(i)
+        }
+        itemName.text = product.productName.toString()
+        itemPrice?.text = "$" + product.price.toString()
+        itemWebsite?.text = "Available in "+product.source.toString()
+        itemWebsite.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
+            startActivity(i)
+        }
+    }
+
+/*                    item_price_id?.setText("$" + price.toString())
+                    web_url = website
+                    item_website_id?.setText(website_name.toString())
+                    productName?.setText(name.toString())*/
+
+
+    private fun productNotFound(){
+        val prodImage : ImageView = findViewById(R.id.item_image)
+        val itemName : TextView = findViewById(R.id.item_name)
+        val itemPrice : TextView = findViewById(R.id.item_price)
+        val itemWebsite : TextView = findViewById(R.id.item_website)
+        val source2 : TextView = findViewById(R.id.secondSource)
+        val avilable : TextView = findViewById(R.id.avilable)
+
+        Glide.with(prodImage.context)
+            .load("https://www.mag-manager.com/wp-content/gallery/magento-product-export-to-ebay/no-magento-product-found.jpg")
+            .into(prodImage)
+
+        itemName.text = "No Product Available"
+        itemPrice.text = " "
+        itemWebsite.text = " "
+        source2.text = " "
+        avilable.text = " "
+    }
+
+    private fun callForSecondSource(key: String){
+
+        val db = Firebase.firestore
+        val docRef = db.collection("source").document(key)
+        val source2 : TextView = findViewById(R.id.secondSource)
+        val avilable : TextView = findViewById(R.id.avilable)
+        var price : String = ""
+        var source: String = ""
+        var url: String = ""
+
+        docRef.get().addOnCompleteListener { task ->
+//            val userInfo = task.toObject(Product::class.java)
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document != null) {
+                    price = document.data?.get("price").toString()
+                    url = document.data?.get("url").toString()
+                    source = document.data?.get("source").toString()
+                    avilable.text = " ".plus("Other Deals")
+                    source2.text = "$".plus(price).plus("            ")
+                        .plus("Available in ").plus(source)
+                    source2.setOnClickListener{
+                        val i = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(i)
+                    }
+                }
+
+            }}
+
+    }
 }
-//}
