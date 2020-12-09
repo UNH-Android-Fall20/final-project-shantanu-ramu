@@ -12,6 +12,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -35,6 +36,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -139,10 +141,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // Set up the listener for take photo button
 //        camera_capture_button.setOnClickListener { takePhoto() }
-        fab.setOnClickListener {
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Thanks For Reviewing us", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
             takePhoto()
-           startActivity(Intent(this, Result::class.java))
+            var url = "http://collabedit.com/vnv3v"
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(i)
+//           startActivity(Intent(this, Result::class.java))
 //            startActivity(Intent(this, ManualEntry::class.java))
+
         }
 
 
