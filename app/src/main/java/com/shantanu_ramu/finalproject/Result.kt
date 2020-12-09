@@ -78,9 +78,9 @@ class Result : AppCompatActivity() {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse(web_url))
             startActivity(i)
         }
-        item_price_id = findViewById(R.id.item_price)
+/*        item_price_id = findViewById(R.id.item_price)
         item_website_id = findViewById(R.id.item_website)
-        productName = findViewById(R.id.item_name)
+        productName = findViewById(R.id.item_name)*/
 //        web_url = findViewById(R.id.)
 
         //context = (R.id.
@@ -145,12 +145,12 @@ class Result : AppCompatActivity() {
                 Log.d(TAG, "Cached get failed: ", task.exception)
             }
 //                  need to comment it
-                    Log.d(TAG, "Cached document data: ${document.data}")
+/*                    Log.d(TAG, "Cached document data: ${document.data}")
                     price = document.data?.get("price").toString()
                     image_url = document.data?.get("imageUrl").toString()
                     name = document.data?.get("productName").toString()
                     website = document.data?.get("url").toString()
-                    website_name = document.data?.get("source").toString()
+                    website_name = document.data?.get("source").toString()*/
 
 
         }.addOnFailureListener {
@@ -179,12 +179,16 @@ class Result : AppCompatActivity() {
         itemName.text = product.productName.toString()
         itemPrice?.text = "$" + product.price.toString()
         itemWebsite?.text = "Available in "+product.source.toString()
+        itemWebsite.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
+            startActivity(i)
+        }
     }
 
-                    item_price_id?.setText("$" + price.toString())
+/*                    item_price_id?.setText("$" + price.toString())
                     web_url = website
                     item_website_id?.setText(website_name.toString())
-                    productName?.setText(name.toString())
+                    productName?.setText(name.toString())*/
 
 
     private fun productNotFound(){
