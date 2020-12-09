@@ -31,6 +31,8 @@
         android:layout_marginTop="220dp"
         android:layout_marginEnd="164dp"
         android:text="Manual Scan"
+        android:background="@drawable/btn_bg"
+        android:textColor="#FFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.441"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +54,8 @@
             android:id="@+id/manual_entry_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
+            android:digits="0123456789"
             android:hint="0123456789" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,10 +24,11 @@ class SlideshowFragment : Fragment() {
         slideshowViewModel =
                 ViewModelProviders.of(this).get(SlideshowViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
+        val barcode: EditText = root.findViewById(R.id.manual_entry_text)
+        /*slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
-        })
+        })*/
+        val submit : Button = root.findViewById(R.id.manual_scan)
         return root
     }
 }

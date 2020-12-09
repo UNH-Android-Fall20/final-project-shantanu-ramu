@@ -19,9 +19,16 @@ class ManualEntry : AppCompatActivity() {
         val res = Result()
 
         manual_scan.setOnClickListener {
+
+
+            //var barcode_value = manual_entry.text
+            //res.append_res_value(barcode_value.toString())
+
             var barcode_value = manual_entry_button.text
             res.append_res_value(barcode_value.toString())
+
             val i = Intent(this, Result::class.java)
+            i.putExtra("key", barcode_value.toString())
             startActivity(i)
         }
     }
